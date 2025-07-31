@@ -168,17 +168,25 @@
   }
 
   /* Animated background pattern */
-  .cyber-pattern {
-    background-image: 
-      radial-gradient(circle at 25% 25%, hsl(135 100% 50% / 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, hsl(210 100% 60% / 0.1) 0%, transparent 50%);
-    background-size: 100px 100px;
-    animation: patternMove 20s linear infinite;
+  .matrix-bg {
+    background: 
+      radial-gradient(ellipse at top, hsl(135 100% 50% / 0.1), transparent 60%),
+      radial-gradient(ellipse at bottom right, hsl(210 100% 60% / 0.1), transparent 60%),
+      radial-gradient(ellipse at bottom left, hsl(180 100% 50% / 0.05), transparent 60%);
+    background-size: 100% 100%, 80% 80%, 60% 60%;
+    animation: backgroundShift 15s ease-in-out infinite;
   }
 
-  @keyframes patternMove {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 100px 100px; }
+  @keyframes backgroundShift {
+    0%, 100% { 
+      background-position: 0% 0%, 100% 100%, 0% 100%;
+    }
+    33% { 
+      background-position: 50% 20%, 20% 80%, 80% 20%;
+    }
+    66% { 
+      background-position: 100% 40%, 80% 20%, 20% 80%;
+    }
   }
 
   /* Text glow effects */

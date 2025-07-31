@@ -4,14 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Copy, Lock, Key, Zap } from 'lucide-react';
+import { Copy, Lock, Key, Zap, QrCode, Download } from 'lucide-react';
 import { encryptMessage, generateSecurePassword } from '@/lib/crypto';
+import { generateQRCode, downloadQRCode } from '@/lib/qr-code';
+import { PasswordStrengthMeter } from '@/components/PasswordStrengthMeter';
 import { useToast } from '@/hooks/use-toast';
 
 export function EncryptionCard() {
   const [message, setMessage] = useState('');
   const [password, setPassword] = useState('');
   const [encryptedResult, setEncryptedResult] = useState('');
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [isEncrypting, setIsEncrypting] = useState(false);
   const { toast } = useToast();
 
@@ -39,6 +42,10 @@ export function EncryptionCard() {
       const result = await encryptMessage(message, password);
       const encryptedPackage = JSON.stringify(result, null, 2);
       setEncryptedResult(encryptedPackage);
+      
+      // Generate QR code for easy sharing
+      const qrUrl = await generateQRCode(encryptedPackage);
+      setQrCodeUrl(qrUrl);
       
       toast({
         title: "Encryption Successful",
@@ -83,6 +90,17 @@ export function EncryptionCard() {
     setMessage('');
     setPassword('');
     setEncryptedResult('');
+    setQrCodeUrl('');
+  };
+
+  const handleDownloadQR = () => {
+    if (qrCodeUrl) {
+      downloadQRCode(qrCodeUrl, 'encrypted-message-qr.png');
+      toast({
+        title: "QR Code Downloaded",
+        description: "QR code saved to your device",
+      });
+    }
   };
 
   return (
@@ -128,6 +146,7 @@ export function EncryptionCard() {
               <Key className="w-4 h-4" />
             </Button>
           </div>
+          <PasswordStrengthMeter password={password} className="mt-2" />
         </div>
 
         <div className="flex gap-3">
@@ -181,6 +200,34 @@ export function EncryptionCard() {
             <p className="text-xs text-muted-foreground">
               Share this encrypted package with your recipient along with the password (separately)
             </p>
+            
+            {/* QR Code Section */}
+            {qrCodeUrl && (
+              <div className="mt-4 p-4 bg-muted/20 rounded-lg border border-border/30">
+                <div className="flex items-center justify-between mb-3">
+                  <Label className="text-xs font-mono text-accent">QR Code for Easy Sharing</Label>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleDownloadQR}
+                    className="text-accent hover:text-accent text-xs"
+                  >
+                    <Download className="w-3 h-3 mr-1" />
+                    Download QR
+                  </Button>
+                </div>
+                <div className="flex justify-center">
+                  <img 
+                    src={qrCodeUrl} 
+                    alt="Encrypted message QR code" 
+                    className="w-32 h-32 rounded border border-border/50"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground text-center mt-2">
+                  Scan to share encrypted package
+                </p>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

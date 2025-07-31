@@ -1,8 +1,8 @@
-import { Shield, Lock, Unlock, Zap } from 'lucide-react';
+import { Shield, Lock, Unlock, Zap, File } from 'lucide-react';
 
 interface CyberHeaderProps {
-  activeTab: 'encrypt' | 'decrypt';
-  onTabChange: (tab: 'encrypt' | 'decrypt') => void;
+  activeTab: 'encrypt' | 'decrypt' | 'file';
+  onTabChange: (tab: 'encrypt' | 'decrypt' | 'file') => void;
 }
 
 export function CyberHeader({ activeTab, onTabChange }: CyberHeaderProps) {
@@ -28,7 +28,7 @@ export function CyberHeader({ activeTab, onTabChange }: CyberHeaderProps) {
         <div className="flex bg-muted/30 rounded-lg p-1 backdrop-blur-sm border border-border/50">
           <button
             onClick={() => onTabChange('encrypt')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-md font-mono font-medium transition-all duration-300 ${
+            className={`flex items-center gap-2 px-4 py-3 rounded-md font-mono font-medium transition-all duration-300 ${
               activeTab === 'encrypt'
                 ? 'bg-gradient-cyber text-primary-foreground shadow-glow-primary'
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
@@ -39,7 +39,7 @@ export function CyberHeader({ activeTab, onTabChange }: CyberHeaderProps) {
           </button>
           <button
             onClick={() => onTabChange('decrypt')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-md font-mono font-medium transition-all duration-300 ${
+            className={`flex items-center gap-2 px-4 py-3 rounded-md font-mono font-medium transition-all duration-300 ${
               activeTab === 'decrypt'
                 ? 'bg-gradient-to-r from-secondary to-accent text-primary-foreground shadow-glow-secondary'
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
@@ -48,22 +48,37 @@ export function CyberHeader({ activeTab, onTabChange }: CyberHeaderProps) {
             <Unlock className="w-4 h-4" />
             Decrypt
           </button>
+          <button
+            onClick={() => onTabChange('file')}
+            className={`flex items-center gap-2 px-4 py-3 rounded-md font-mono font-medium transition-all duration-300 ${
+              activeTab === 'file'
+                ? 'bg-gradient-to-r from-accent to-secondary text-primary-foreground shadow-glow-accent'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+            }`}
+          >
+            <File className="w-4 h-4" />
+            Files
+          </button>
         </div>
       </div>
 
       {/* Security Features */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto text-sm">
-        <div className="flex items-center justify-center gap-2 p-3 bg-muted/20 rounded-lg border border-border/30">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 max-w-4xl mx-auto text-sm">
+        <div className="flex items-center justify-center gap-2 p-3 bg-muted/20 rounded-lg border border-border/30 animate-fade-in">
           <Zap className="w-4 h-4 text-primary" />
           <span className="text-muted-foreground">AES-256-GCM</span>
         </div>
-        <div className="flex items-center justify-center gap-2 p-3 bg-muted/20 rounded-lg border border-border/30">
+        <div className="flex items-center justify-center gap-2 p-3 bg-muted/20 rounded-lg border border-border/30 animate-fade-in" style={{animationDelay: '0.1s'}}>
           <Shield className="w-4 h-4 text-secondary" />
-          <span className="text-muted-foreground">PBKDF2 Key Derivation</span>
+          <span className="text-muted-foreground">PBKDF2 Keys</span>
         </div>
-        <div className="flex items-center justify-center gap-2 p-3 bg-muted/20 rounded-lg border border-border/30">
+        <div className="flex items-center justify-center gap-2 p-3 bg-muted/20 rounded-lg border border-border/30 animate-fade-in" style={{animationDelay: '0.2s'}}>
           <Lock className="w-4 h-4 text-accent" />
-          <span className="text-muted-foreground">Client-Side Security</span>
+          <span className="text-muted-foreground">Zero Knowledge</span>
+        </div>
+        <div className="flex items-center justify-center gap-2 p-3 bg-muted/20 rounded-lg border border-border/30 animate-fade-in" style={{animationDelay: '0.3s'}}>
+          <File className="w-4 h-4 text-primary" />
+          <span className="text-muted-foreground">File Encryption</span>
         </div>
       </div>
     </div>
