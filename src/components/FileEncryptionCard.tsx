@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Upload, Download, Lock, File, Zap } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Upload, Download, Lock, File, Zap, Unlock } from 'lucide-react';
 import { encryptFile, decryptFile } from '@/lib/file-crypto';
+import { FileDecryptionCard } from '@/components/FileDecryptionCard';
 import { useToast } from '@/hooks/use-toast';
 
 export function FileEncryptionCard() {
@@ -100,7 +102,21 @@ export function FileEncryptionCard() {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-card/50 backdrop-blur-sm border-border/50 shadow-glow-accent/10 animate-fade-in">
+    <div className="w-full max-w-4xl mx-auto space-y-6">
+      <Tabs defaultValue="encrypt" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsTrigger value="encrypt" className="flex items-center gap-2">
+            <Lock className="w-4 h-4" />
+            Encrypt Files
+          </TabsTrigger>
+          <TabsTrigger value="decrypt" className="flex items-center gap-2">
+            <Unlock className="w-4 h-4" />
+            Decrypt Files
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="encrypt">
+          <Card className="w-full bg-card/50 backdrop-blur-sm border-border/50 shadow-glow-accent/10 animate-fade-in">
       <CardHeader className="text-center space-y-2">
         <div className="mx-auto w-12 h-12 bg-gradient-to-r from-accent to-secondary rounded-lg flex items-center justify-center mb-4 animate-float">
           <File className="w-6 h-6 text-primary-foreground" />
@@ -216,5 +232,12 @@ export function FileEncryptionCard() {
         )}
       </CardContent>
     </Card>
+        </TabsContent>
+        
+        <TabsContent value="decrypt">
+          <FileDecryptionCard />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }

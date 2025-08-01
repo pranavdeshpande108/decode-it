@@ -103,6 +103,41 @@ export const QRReaderCard = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label>Paste QR Content/Link</Label>
+            <div className="flex gap-2">
+              <Input
+                placeholder="Paste QR content or link here..."
+                value={result}
+                onChange={(e) => setResult(e.target.value)}
+                className="input-cyber"
+              />
+              <Button
+                onClick={() => {
+                  navigator.clipboard.readText().then(text => {
+                    setResult(text);
+                    toast({
+                      title: 'Pasted!',
+                      description: 'Content pasted from clipboard',
+                    });
+                  }).catch(() => {
+                    toast({
+                      title: 'Paste Failed',
+                      description: 'Could not read clipboard',
+                      variant: 'destructive',
+                    });
+                  });
+                }}
+                variant="outline"
+                size="sm"
+              >
+                Paste
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>Upload QR Code Image</Label>
@@ -159,24 +194,60 @@ export const QRReaderCard = () => {
         )}
 
         {result && (
-          <div className="space-y-2">
-            <Label htmlFor="result">Decoded Content</Label>
-            <div className="relative">
-              <Textarea
-                id="result"
-                value={result}
-                readOnly
-                className="input-cyber min-h-[120px] font-mono pr-12"
-              />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={copyToClipboard}
-                className="absolute top-2 right-2 h-8 w-8 p-0"
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="result">Decoded Content</Label>
+              <div className="relative">
+                <Textarea
+                  id="result"
+                  value={result}
+                  readOnly
+                  className="input-cyber min-h-[120px] font-mono pr-12"
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={copyToClipboard}
+                  className="absolute top-2 right-2 h-8 w-8 p-0"
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
+
+            {/* Link Detection and Actions */}
+            {result && (result.includes('http://') || result.includes('https://')) && (
+              <div className="p-4 bg-accent/5 rounded-lg border border-accent/20 space-y-3">
+                <div className="flex items-center gap-2 text-accent text-sm font-mono">
+                  <span>🔗</span>
+                  Link detected in QR code
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      if (result.match(/https?:\/\/[^\s]+/)) {
+                        window.open(result.match(/https?:\/\/[^\s]+/)?.[0], '_blank');
+                      }
+                    }}
+                    className="flex items-center gap-2"
+                  >
+                    <span>🚀</span>
+                    Open Link
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={copyToClipboard}
+                    className="flex items-center gap-2"
+                  >
+                    <Copy className="h-4 w-4" />
+                    Copy Link
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

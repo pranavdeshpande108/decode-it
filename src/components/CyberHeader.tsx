@@ -15,7 +15,7 @@ export function CyberHeader({ activeTab, onTabChange }: CyberHeaderProps) {
         </div>
         <div className="space-y-2">
           <h1 className="text-4xl md:text-5xl font-mono font-bold text-glow bg-gradient-cyber bg-clip-text text-transparent">
-            CyberVault
+            Decode-it
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Advanced AES-256-GCM encryption for secure communication
